@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Address Book</string>
+    <string name="full_name_format">%1$s %2$s</string>
+    <string name="title_first_name">First Name</string>
+    <string name="title_last_name">Last Name</string>
+    <string name="title_email">Email Address</string>
+    <string name="title_phone_number">Phone Number</string>
+    <string name="title_address">Address</string>
+    <string name="title_save">Save</string>
+</resources>
