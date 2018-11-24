@@ -58,7 +58,11 @@ class AddEditFragment : Fragment() {
     }
 
     private fun setupEditOperation() {
-        detailViewModel.getContactDetail(contactId).observe(this, Observer { detail ->
+        // set contact detail
+        detailViewModel.setContactDetail(contactId)
+
+        // observe contact detail result
+        detailViewModel.getContactDetail().observe(this, Observer { detail ->
             detail?.apply {
                 etFirstName.setText(firstName)
                 etLastName.setText(lastName)

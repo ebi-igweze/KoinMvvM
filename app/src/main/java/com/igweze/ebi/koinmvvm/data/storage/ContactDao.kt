@@ -9,13 +9,13 @@ import com.igweze.ebi.koinmvvm.data.models.ContactDetail
 interface ContactDao {
 
     @Insert
-    fun insertContact(contact: ContactDetail)
+    fun insertContact(contact: ContactDetail): Long
 
     @Query("SELECT id, firstName, lastName, address FROM contact ORDER BY firstName ASC")
     fun getContacts(): LiveData<List<Contact>>
 
     @Query("SELECT * FROM contact WHERE id = :id")
-    fun getContactById(id: Int): LiveData<ContactDetail>
+    fun getContactById(id: Int): ContactDetail
 
     @Update
     fun updateContact(contact: ContactDetail)

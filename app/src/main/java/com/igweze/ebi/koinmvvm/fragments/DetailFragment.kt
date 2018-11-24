@@ -35,6 +35,7 @@ class DetailFragment: Fragment() {
 
         // close activity if no contact id was passed
         if (contactId == NO_CONTACT_ID) requireActivity().finish()
+        else detailViewModel.setContactDetail(contactId)
 
         editButton.setOnClickListener {
             // show edit screen
@@ -42,7 +43,7 @@ class DetailFragment: Fragment() {
         }
 
         // get and set contact details
-        detailViewModel.getContactDetail(contactId).observe(this, Observer {
+        detailViewModel.getContactDetail().observe(this, Observer {
             it?.apply {
                 tvEmail.text = email
                 tvAddress.text = address

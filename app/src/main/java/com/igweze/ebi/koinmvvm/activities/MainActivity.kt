@@ -4,7 +4,9 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.igweze.ebi.koinmvvm.R
 import com.igweze.ebi.koinmvvm.adapters.ContactAdapter
 import com.igweze.ebi.koinmvvm.viewmodels.MainViewModel
@@ -27,8 +29,13 @@ class MainActivity : AppCompatActivity() {
         // set support toolbar
         setSupportActionBar(toolbar)
 
+        // recycler view adapter and item decorator
         val adapter = ContactAdapter(ArrayList())
+        val itemDivider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+
+        // setup recycler view
         contactsRecycler.adapter = adapter
+        contactsRecycler.addItemDecoration(itemDivider)
         contactsRecycler.layoutManager = LinearLayoutManager(this)
 
         addButton.setOnClickListener {
@@ -43,10 +50,25 @@ class MainActivity : AppCompatActivity() {
                 else -> it
             }
 
+            if (contacts.isNotEmpty()) hideNoContacts()
+            else showNoContacts()
+
             // setup list for recycler
             adapter.setContactList(contacts)
         })
 
+    }
+
+    private fun hideNoContacts() {
+        contactsRecycler.bringToFront()
+        contactsRecycler.visibility = View.VISIBLE
+        noContactContainer.visibility = View.INVISIBLE
+    }
+
+    private fun showNoContacts() {
+        noContactContainer.bringToFront()
+        noContactContainer.visibility = View.VISIBLE
+        contactsRecycler.visibility = View.INVISIBLE
     }
 
 }

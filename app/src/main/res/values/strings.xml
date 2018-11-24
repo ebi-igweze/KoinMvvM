@@ -7,4 +7,5 @@
     <string name="title_phone_number">Phone Number</string>
     <string name="title_address">Address</string>
     <string name="title_save">Save</string>
+    <string name="title_no_contacts_yet">No Contacts Yet</string>
 </resources>
