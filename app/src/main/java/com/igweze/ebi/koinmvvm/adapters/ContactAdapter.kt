@@ -10,7 +10,7 @@ import com.igweze.ebi.koinmvvm.R
 import com.igweze.ebi.koinmvvm.activities.ContactInfoActivity
 import com.igweze.ebi.koinmvvm.data.models.Contact
 
-class ContactAdapter(private val contacts: List<Contact>): RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
+class ContactAdapter(private var contacts: List<Contact>): RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout = LayoutInflater.from(parent.context).inflate(R.layout.list_item_contact, parent, false)
@@ -22,6 +22,11 @@ class ContactAdapter(private val contacts: List<Contact>): RecyclerView.Adapter<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val contact = contacts[position]
         holder.bind(contact)
+    }
+
+    fun setContactList(list: List<Contact>) {
+        contacts = list
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {

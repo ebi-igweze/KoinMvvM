@@ -1,15 +1,19 @@
 package com.igweze.ebi.koinmvvm.activities
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.igweze.ebi.koinmvvm.R
 import com.igweze.ebi.koinmvvm.adapters.ContactAdapter
-import com.igweze.ebi.koinmvvm.data.models.Contact
+import com.igweze.ebi.koinmvvm.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
+
+    private val mainViewModel: MainViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +27,8 @@ class MainActivity : AppCompatActivity() {
         // set support toolbar
         setSupportActionBar(toolbar)
 
-        // setup recycler
-        val contacts = getContacts()
-        contactsRecycler.adapter = ContactAdapter(contacts)
+        val adapter = ContactAdapter(ArrayList())
+        contactsRecycler.adapter = adapter
         contactsRecycler.layoutManager = LinearLayoutManager(this)
 
         addButton.setOnClickListener {
@@ -34,15 +37,16 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+        mainViewModel.getContacts().observe(this, Observer {
+            val contacts = when(it) {
+                null -> ArrayList()
+                else -> it
+            }
+
+            // setup list for recycler
+            adapter.setContactList(contacts)
+        })
+
     }
-
-
-    private fun getContacts() = listOf(
-            Contact(0, "Ebi", "Igweze", "32, Chief Collins Street, Lekki Phase 1"),
-            Contact(1, "Daniel", "Adenuga", "12, Adesina Street, Iyana Ipaja"),
-            Contact(2, "James", "Patrick", "2, Bisway street, Lekki Phase 1"),
-            Contact(3, "John", "Ogbomanu", "8, Alakija, off Bode Thomas Street, Surulere"),
-            Contact(4, "Uche", "Okonkwo", "7, harbert Marculey way, Ikoyi")
-    )
 
 }

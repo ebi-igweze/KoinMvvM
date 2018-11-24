@@ -1,5 +1,6 @@
 package com.igweze.ebi.koinmvvm.fragments
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -8,12 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.igweze.ebi.koinmvvm.R
-import com.igweze.ebi.koinmvvm.activities.ContactInfoActivity
+import com.igweze.ebi.koinmvvm.activities.ContactInfoActivity.Companion.KEY_CONTACT_ID
+import com.igweze.ebi.koinmvvm.activities.ContactInfoActivity.Companion.NO_CONTACT_ID
+import com.igweze.ebi.koinmvvm.viewmodels.DetailViewModel
+import kotlinx.android.synthetic.main.fragment_detail.*
+import org.koin.android.ext.android.inject
 
 
 class DetailFragment: Fragment() {
 
-    private var contactId = -1
+    private val detailViewModel: DetailViewModel by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_detail, container, false)
@@ -21,22 +26,30 @@ class DetailFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        arguments?.apply {
+        arguments?.apply { setupView(this) }
 
-            contactId = getInt(ContactInfoActivity.KEY_CONTACT_ID, -1)
+    }
 
-            val fabEdit: FloatingActionButton = view.findViewById(R.id.editButton)
+    private fun setupView(bundle: Bundle) {
+        val contactId = bundle.getInt(KEY_CONTACT_ID, NO_CONTACT_ID)
 
-            fabEdit.setOnClickListener {
-                val intent = Intent(requireActivity(), ContactInfoActivity::class.java).apply {
-                    putExtra(ContactInfoActivity.KEY_CONTACT_ID, contactId)
-                    putExtra(ContactInfoActivity.KEY_OPERATION, ContactInfoActivity.OPERATION_EDIT)
-                }
+        // close activity if no contact id was passed
+        if (contactId == NO_CONTACT_ID) requireActivity().finish()
 
-                it.context.startActivity(intent)
-            }
-
+        editButton.setOnClickListener {
+            // show edit screen
+            detailViewModel.setFragment(DetailViewModel.ContactFragment.EditFragment)
         }
+
+        // get and set contact details
+        detailViewModel.getContactDetail(contactId).observe(this, Observer {
+            it?.apply {
+                tvEmail.text = email
+                tvAddress.text = address
+                tvPhoneNumber.text = phoneNumber
+                tvFullName.text = getString(R.string.full_name_format, firstName, lastName)
+            }
+        })
 
     }
 

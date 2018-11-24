@@ -13,7 +13,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
-        private const val DATABASE_NAME = "contacts.db"
+        private const val DATABASE_NAME = "addressbook.db"
 
         fun getInstance(context: Context): AppDatabase = synchronized(this) { buildDatabase(context) }
 

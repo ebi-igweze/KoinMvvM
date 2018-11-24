@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:hint="@string/title_email"
-            android:inputType="textCapWords"
+            android:inputType="textEmailAddress"
             android:maxLines="1"
             android:textSize="16sp" />
 
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:hint="@string/title_phone_number"
-            android:inputType="textCapWords"
+            android:inputType="phone"
             android:maxLines="1"
             android:textSize="16sp" />
 
