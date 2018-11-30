@@ -17,6 +17,7 @@ import org.koin.android.scope.ext.android.getOrCreateScope
 class ContactInfoActivity : AppCompatActivity() {
 
     private val detailViewModel: DetailViewModel by inject()
+    private lateinit var fragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +64,10 @@ class ContactInfoActivity : AppCompatActivity() {
 
     // set up the current fragment's view
     private fun setupFragment(operation: Int, bundle: Bundle) {
+        // check if current fragment is detail fragment
+        val wasDetail = ::fragment.isInitialized && fragment is DetailFragment
 
-        val fragment  = when (operation) {
+        fragment  = when (operation) {
             OPERATION_EDIT -> setupEditContact(bundle)
             OPERATION_VIEW -> setupViewContact(bundle)
             else -> setupAddContact(bundle)
@@ -76,7 +79,11 @@ class ContactInfoActivity : AppCompatActivity() {
                 .also { transaction ->
                     // if we are moving from detail fragment to edit fragment
                     // add new fragment to back stack, to go back to edit fragment
-                    if (fragment is AddEditFragment && operation == OPERATION_EDIT)
+                    val shouldAddToBackStack = wasDetail
+                            && fragment is AddEditFragment
+                            && operation == OPERATION_EDIT
+
+                    if (shouldAddToBackStack)
                         transaction.addToBackStack(fragment.tag)
                 }.commit()
     }

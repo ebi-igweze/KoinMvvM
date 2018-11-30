@@ -8,4 +8,7 @@
     <string name="title_address">Address</string>
     <string name="title_save">Save</string>
     <string name="title_no_contacts_yet">No Contacts Yet</string>
+    <string name="title_delete">Delete</string>
+    <string name="title_edit">Edit</string>
+    <string name="title_synced_contacts">Synced Contacts</string>
 </resources>

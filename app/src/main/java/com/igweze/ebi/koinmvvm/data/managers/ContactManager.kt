@@ -7,6 +7,7 @@ import com.igweze.ebi.koinmvvm.data.storage.ContactDao
 import com.igweze.ebi.koinmvvm.utilities.computationToUI
 import com.igweze.ebi.koinmvvm.utilities.subscribeToError
 import io.reactivex.Single
+import java.util.*
 
 class ContactManager(private val contactDao: ContactDao) {
 
@@ -21,5 +22,9 @@ class ContactManager(private val contactDao: ContactDao) {
                 .computationToUI() // execute query in computation thread
                 .subscribeToError() // handle any error outputs
     }
+
+    fun getContactsFrom(time: Date): Single<List<ContactDetail>> = Single.fromCallable { contactDao.getContactsByTime(time.time) }
+
+    fun deleteContact(contactId: Int): Single<Int> = getContactDetail(contactId).map { contactDao.deleteContact(it) }
 
 }

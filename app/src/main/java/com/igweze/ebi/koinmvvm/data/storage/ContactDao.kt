@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.igweze.ebi.koinmvvm.data.models.Contact
 import com.igweze.ebi.koinmvvm.data.models.ContactDetail
+import java.util.*
 
 @Dao
 interface ContactDao {
@@ -22,5 +23,8 @@ interface ContactDao {
 
     @Delete
     fun deleteContact(contact: ContactDetail): Int
+
+    @Query("SELECT * FROM contact WHERE timeUpdated >= :time")
+    fun getContactsByTime(time: Long): List<ContactDetail>
 
 }

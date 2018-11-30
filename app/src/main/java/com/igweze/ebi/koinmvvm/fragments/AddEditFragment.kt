@@ -14,6 +14,7 @@ import com.igweze.ebi.koinmvvm.data.models.ContactDetail
 import com.igweze.ebi.koinmvvm.viewmodels.DetailViewModel
 import kotlinx.android.synthetic.main.fragment_add_edit.*
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class AddEditFragment : Fragment() {
 
@@ -41,7 +42,7 @@ class AddEditFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.edit_menu, menu)
+        inflater?.inflate(R.menu.menu_edit, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -88,6 +89,7 @@ class AddEditFragment : Fragment() {
             etLastName.text.toString(),
             etEmail.text.toString(),
             etPhoneNumber.text.toString(),
+            Calendar.getInstance().time,
             etAddress.text.toString())
 
 

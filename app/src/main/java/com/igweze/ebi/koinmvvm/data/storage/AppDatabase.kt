@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.igweze.ebi.koinmvvm.data.models.ContactDetail
 
-@Database(entities = [ContactDetail::class], exportSchema = false, version = 1)
+@Database(entities = [ContactDetail::class], exportSchema = false, version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val contactDao: ContactDao
