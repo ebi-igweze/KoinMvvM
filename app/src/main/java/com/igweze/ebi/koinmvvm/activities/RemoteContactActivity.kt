@@ -33,7 +33,10 @@ class RemoteContactActivity : AppCompatActivity() {
     private fun setupUI() {
         // set support toolbar
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            setTitle(R.string.title_remote_contacts)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         // recycler view adapter and item decorator
         adapter = ContactAdapter(ArrayList()) { ignore() }

@@ -11,8 +11,8 @@ import com.igweze.ebi.koinmvvm.data.managers.ContactServerManager
 import com.igweze.ebi.koinmvvm.utilities.onComputationOnly
 import com.igweze.ebi.koinmvvm.utilities.subscribeToError
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 import java.util.Date
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -27,17 +27,14 @@ class SyncObserver(private val lifecycleOwner: LifecycleOwner,
 
     @OnLifecycleEvent(ON_CREATE)
     fun onCreate() {
-        // publish current time and
-        // create flowable pulisher of time
-        // for every hour
+        // publish update every 2 hours
+        timeSubscription = Flowable.interval(1, TimeUnit.MINUTES)
+                .subscribe { timeToUpdate.postValue(Calendar.getInstance().time) }
     }
 
     @OnLifecycleEvent(ON_START)
     fun onStart() {
-        // publish update every 2 hours
-        timeSubscription = Flowable.interval(2, TimeUnit.HOURS)
-                .subscribe { timeToUpdate.postValue(Calendar.getInstance().time) }
-
+        Timber.d("Starting Observer")
         // observe time updates
         timeToUpdate.observe(lifecycleOwner, Observer {
             it?.apply { syncUpUnTill(this) }
@@ -47,12 +44,16 @@ class SyncObserver(private val lifecycleOwner: LifecycleOwner,
 
     @OnLifecycleEvent(ON_DESTROY)
     fun onDestroy() {
+        Timber.d("Stopping Observer")
         timeSubscription.dispose()
     }
 
-    private fun syncUpUnTill(time: Date) {
-        contactManager.getContactsFrom(time)
-                .map { contactServerManager.syncContacts(it) }
+    private fun syncUpUnTill(newTime: Date) {
+        Timber.d("Syncing current Date")
+
+        val lastUpdate = contactServerManager.getLastUpdate()
+        contactManager.getContactsFrom(lastUpdate)
+                .map { contactServerManager.syncContacts(newTime, it) }
                 .onComputationOnly() // run on computation thread
                 .subscribeToError() // check for errors
     }

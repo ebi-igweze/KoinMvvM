@@ -13,7 +13,7 @@ class SharedPreferenceManager(private val context: Context) {
 
     fun getString(key: String, default: String? = null): String? = getSharedPreference().getString(key, default)
 
-    fun saveNumber(key: String, value: Long) = getEditor().putLong(key, value)
+    fun saveNumber(key: String, value: Long) = getEditor().putLong(key, value).commit()
 
     fun getNumber(key: String, default: Long = 0): Long = getSharedPreference().getLong(key, default)
 

@@ -16,10 +16,11 @@ class ContactServerManager(private val preferenceManager: SharedPreferenceManage
 
     fun getContacts(): Single<List<Contact>> = Single.fromCallable {
         val listAsString = preferenceManager.getString(CONTACT_LIST)
-        return@fromCallable when (listAsString) {
+        val result = when (listAsString) {
             null -> ArrayList()
-            else -> Gson().fromJson<List<Contact>>(listAsString, Array<Contact>::class.java).toList()
+            else -> Gson().fromJson<Array<Contact>>(listAsString, Array<Contact>::class.java).toList()
         }
+        return@fromCallable result
     }
 
     fun getLastUpdate(): Date {
@@ -27,17 +28,19 @@ class ContactServerManager(private val preferenceManager: SharedPreferenceManage
         return  Date(lastUpdated)
     }
 
-    fun syncContacts(updateList: List<ContactDetail>) {
-        val listAsString = preferenceManager.getString(CONTACT_LIST)
-        val lastUpdate = getLastUpdate()
-        val currentTime = Calendar.getInstance().time
+    private fun setLastUpdated(currentTime: Date) = preferenceManager.saveNumber(LAST_UPDATE, currentTime.time)
 
-        if (currentTime > lastUpdate) {
-            when(listAsString) {
-                null -> addAllContacts(updateList)
-                else -> addAndUpdateContacts(updateList, listAsString)
-            }
+    fun syncContacts(currentTime: Date, updateList: List<ContactDetail>) {
+        // return early if nothing to update
+        if (updateList.isEmpty()) return
+
+        val listAsString = preferenceManager.getString(CONTACT_LIST)
+        when(listAsString) {
+            null -> addAllContacts(updateList)
+            else -> addAndUpdateContacts(updateList, listAsString)
         }
+
+        setLastUpdated(currentTime)
     }
 
     private fun addAllContacts(contacts: List<ContactDetail>) {
