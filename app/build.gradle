@@ -14,7 +14,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner " com.igweze.ebi.koinmvvm.MockTestRunner"
     }
     buildTypes {
         release {
@@ -59,6 +59,10 @@ dependencies {
     // koin version
     def koin_version = '1.0.1'
     implementation "org.koin:koin-android-viewmodel:$koin_version"
+    // Koin for Unit tests
+    testImplementation "org.koin:koin-test:$koin_version"
+
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

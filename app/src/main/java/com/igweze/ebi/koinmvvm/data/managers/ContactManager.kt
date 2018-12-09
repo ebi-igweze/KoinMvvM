@@ -17,10 +17,9 @@ class ContactManager(private val contactDao: ContactDao) {
 
     fun addContactDetail(contactDetail: ContactDetail): Single<Long> = Single.fromCallable { contactDao.insertContact(contactDetail) }
 
-    fun updateContactDetail(contactDetail: ContactDetail) {
-        Single.fromCallable { contactDao.updateContact(contactDetail) }
+    fun updateContactDetail(contactDetail: ContactDetail): Single<Unit> {
+        return Single.fromCallable { contactDao.updateContact(contactDetail) }
                 .computationToUI() // execute query in computation thread
-                .subscribeToError() // handle any error outputs
     }
 
     fun getContactsFrom(time: Date): Single<List<ContactDetail>> = Single.fromCallable { contactDao.getContactsByTime(time.time) }

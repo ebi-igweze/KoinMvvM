@@ -8,6 +8,7 @@ import com.igweze.ebi.koinmvvm.data.storage.AppDatabase
 import com.igweze.ebi.koinmvvm.log.ProductionTree
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
+import org.koin.experimental.builder.single
 import timber.log.Timber
 
 
@@ -26,11 +27,11 @@ private val dataModule = module {
 
     single { get<AppDatabase>().contactDao }
 
-    single { SharedPreferenceManager(androidContext()) }
+    single<SharedPreferenceManager>()
 
-    single { ContactManager(get()) }
+    single<ContactManager>()
 
-    single { ContactServerManager(get())}
+    single<ContactServerManager>()
 }
 
 

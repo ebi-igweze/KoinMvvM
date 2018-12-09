@@ -50,7 +50,7 @@ class DetailViewModel(private val contactManager: ContactManager): ViewModel() {
     }
 
     fun updateContactDetail(contactDetail: ContactDetail) {
-        contactManager.updateContactDetail(contactDetail)
+        contactManager.updateContactDetail(contactDetail).subscribeToError()
     }
 
     override fun onCleared() {

@@ -16,11 +16,10 @@ class ContactServerManager(private val preferenceManager: SharedPreferenceManage
 
     fun getContacts(): Single<List<Contact>> = Single.fromCallable {
         val listAsString = preferenceManager.getString(CONTACT_LIST)
-        val result = when (listAsString) {
-            null -> ArrayList()
-            else -> Gson().fromJson<Array<Contact>>(listAsString, Array<Contact>::class.java).toList()
+        return@fromCallable when (listAsString) {
+            null, "", " "-> ArrayList()
+            else -> Gson().fromJson(listAsString, Array<Contact>::class.java).toList()
         }
-        return@fromCallable result
     }
 
     fun getLastUpdate(): Date {

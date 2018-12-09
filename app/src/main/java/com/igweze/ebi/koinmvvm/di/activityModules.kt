@@ -6,8 +6,9 @@ import com.igweze.ebi.koinmvvm.services.SyncObserver
 import com.igweze.ebi.koinmvvm.viewmodels.DetailViewModel
 import com.igweze.ebi.koinmvvm.viewmodels.MainViewModel
 import com.igweze.ebi.koinmvvm.viewmodels.RemoteContactViewModel
-import org.koin.android.viewmodel.ext.koin.viewModel
+import org.koin.android.viewmodel.experimental.builder.viewModel
 import org.koin.dsl.module.module
+import org.koin.experimental.builder.scope
 
 val syncModule = module {
 
@@ -17,22 +18,20 @@ val syncModule = module {
 
 val mainModule = module {
 
-    viewModel { MainViewModel(get()) }
+    viewModel<MainViewModel>()
 }
 
 val remoteModule = module {
 
-    viewModel { RemoteContactViewModel(get()) }
+    viewModel<RemoteContactViewModel>()
 }
 
 val detailsModule = module {
-
-    scope(DETAIL_SCOPE) { DetailViewModel(get()) }
-
+    scope<DetailViewModel>(DETAIL_SCOPE)
 }
 
 
-val activitiesModules = listOf(mainModule, detailsModule, remoteModule, syncModule)
+val activityModules = listOf(mainModule, detailsModule, remoteModule, syncModule)
 
 object ModuleConstants {
 
