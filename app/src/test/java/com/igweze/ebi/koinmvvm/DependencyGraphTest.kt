@@ -16,7 +16,7 @@ class DependencyGraphTest: KoinTest {
     @Test
     fun checkDependencyGraph() {
 
-        // checkDependencyGraph add this module last to override any previously defined dependencies
+        // override any previously defined dependencies
         val mockApplication = module(override = true) {
 
             single { mock(Application::class.java) }
